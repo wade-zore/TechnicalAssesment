@@ -2,7 +2,7 @@ from django.db.models import Q
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from .models import Employee
-from .serializer import EmployeeSerializer
+from .serializers import EmployeeSerializer
 
 FIELDS_TO_SEARCH = ['first_name', 'last_name', 'email']
 
