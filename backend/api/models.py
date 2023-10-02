@@ -62,4 +62,4 @@ class Employee(models.Model):
         verbose_name_plural = "Employees"
 
     def __str__(self):
-        return f" Employee - {self.first_name} {self.last_name}"
+        return f"Employee - {self.first_name} {self.last_name}"

@@ -1,0 +1,16 @@
+[run]
+
+omit =
+    */migrations/*
+    *admin.py*
+    *settings.py*
+    *manage.py*
+    *tests/*
+    *tests.py
+    *wsgi.py*
+    *apps.py*
+    *conftest.py
+    *__init__.py*
+    */management/commands/*
+    */scripts/*
+    *asgi.py*
