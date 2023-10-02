@@ -1,5 +1,7 @@
 import datetime
-
+import json
+import random
+import string
 from django.db import models
 
 RATINGS = (
@@ -7,6 +9,12 @@ RATINGS = (
     ("intermediate", "Intermediate"),
     ("expert", "Expert")
 )
+
+
+def generate_custom_id():
+    custom_id = ''.join(random.choice(string.ascii_uppercase) for _ in range(2)) + ''.join(
+        random.choice(string.digits) for _ in range(4))
+    return custom_id
 
 
 class Skill(models.Model):
@@ -18,7 +26,7 @@ class Skill(models.Model):
         null=False,
         blank=False,
         choices=RATINGS,
-        default="Beginner",
+        default="beginner",
     )
 
     class Meta:
@@ -30,7 +38,7 @@ class Skill(models.Model):
 
 
 class Employee(models.Model):
-    employee_id = models.CharField(max_length=200, unique=True, null=True)
+    id = models.CharField(primary_key=True, max_length=6)
     first_name = models.CharField(max_length=200)
     last_name = models.CharField(max_length=200)
     contact_number = models.CharField(max_length=11)
@@ -43,6 +51,11 @@ class Employee(models.Model):
     skills = models.ManyToManyField(
         Skill, related_name="skills"
     )
+
+    def save(self, *args, **kwargs):
+        if not self.id:  # Check if an ID already exists
+            self.id = generate_custom_id()
+        super(Employee, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name = "Employee"
