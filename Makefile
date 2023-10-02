@@ -31,4 +31,5 @@ logs:
 test:
 	@docker-compose run --rm backend pytest --cov=. --cov-report=term-missing
 
-
+npm-install:
+	@docker-compose run --rm frontend npm install

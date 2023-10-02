@@ -40,7 +40,7 @@ function AddEmployee() {
      * Get values from local storage and sets the state is local storage is not empty.
      */
     useEffect(() => {
-        if (window.localStorage.length != 0) {
+        if (window.localStorage.length !== 0) {
             setFirstName(window.localStorage.getItem('first_name'));
             setLastName(window.localStorage.getItem('last_name'));
             setContactNumber(window.localStorage.getItem('contact_number'));
