@@ -18,7 +18,6 @@ function ViewEmployee(props) {
      */
     const employee = useLocation();
     const [id,setID] = useState(employee.state.employee.id)
-    const [employee_id,setEmployeeId] = useState(employee.state.employee.employee_id)
     const [first_name,setFirstName] = useState("")
     const [last_name,setLastName] = useState("")
     const [contact_number,setContactNumber] = useState("")
@@ -207,7 +206,7 @@ function ViewEmployee(props) {
                 <div className="mb-8 flex items-center justify-between gap-8">
                     <div>
                         <Typography variant="h5" color="blue-gray">
-                            Details for: {employee_id}
+                            Details for: {id}
                         </Typography>
                         <Typography color="gray" className="mt-1 font-normal">
                             View all details for {first_name+" "+last_name}
