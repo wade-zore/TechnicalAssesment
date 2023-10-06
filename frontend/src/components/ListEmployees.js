@@ -46,8 +46,8 @@ function ListEmployees(){
      * @returns employee object.
      */
     const searchEmployee = async () =>{
-        console.log("http://localhost:8000/employee/?search="+searchKeyword.key)
-        fetch("http://localhost:8000/employee/?search="+searchKeyword.key,{
+        console.log("http://localhost:8000/api/employee/?search="+searchKeyword.key)
+        fetch("http://localhost:8000/api/employee/?search="+searchKeyword.key,{
                 method:  'GET',
                 mode: 'cors',
             })
@@ -72,14 +72,14 @@ function ListEmployees(){
         return () => { // This code runs when component is unmounted
             componentMounted.current = false; // (4) set it to false when we leave the page
         }
-    }, [employees])
+    }, [])
 
     /**
      * Make a call to the rest endpoint to get list of employee record from database
      * @returns List of employees
      */
     const fetchList = async ()=>{
-        const res =await fetch('http://localhost:8000/employee/')
+        const res =await fetch('http://localhost:8000/api/employee/')
         const data = await res.json()
         return data
     }

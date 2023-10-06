@@ -89,7 +89,7 @@ function AddEmployee() {
     const handleCountryChange = (e) => setCoutry(e.target.value)
     const handleSkillChange = (id, e) => {
         const newSkills = skills.map(i => {
-            if (id === i.skillNum) {
+            if (id === i.skill_id) {
                 i[e.target.name] = e.target.value
             }
             return i;
@@ -103,7 +103,7 @@ function AddEmployee() {
      */
     const handleRemoveFields = id => {
         const values = [...skills];
-        values.splice(values.findIndex(value => value.skillNum === id), 1);
+        values.splice(values.findIndex(value => value.skill_id === id), 1);
         setSkill(values);
     }
 
@@ -135,7 +135,7 @@ function AddEmployee() {
             skills: skills
         }
         console.log(employee)
-            fetch("http://localhost:8000/employee/", {
+            fetch("http://localhost:8000/api/employee/", {
                 method: 'POST',
                 mode: 'cors',
                 headers: {
@@ -215,18 +215,18 @@ function AddEmployee() {
                             {skills.map((skill) => {
                                 return (
 
-                                    <div key={skill.skillNum} >
+                                    <div key={skill.skill_id} >
 
-                                        <div key={skill.skillNum} >
+                                        <div key={skill.skill_id} >
                                             <div className="flex gap-2" >
-                                                <Input size="lg" label="Skill" name="skill" onChange={e => handleSkillChange(skill.skillNum, e)}/>
-                                                <Input size="lg" label="Years experience" name="experience" onChange={e => handleSkillChange(skill.skillNum, e)}/>
-                                                <Input size="lg" label="Seniority rating" name="seniority_rating" onChange={e => handleSkillChange(skill.skillNum, e)}/>
+                                                <Input size="lg" label="Skill" name="skill" onChange={e => handleSkillChange(skill.skill_id, e)}/>
+                                                <Input size="lg" label="Years experience" name="experience" onChange={e => handleSkillChange(skill.skill_id, e)}/>
+                                                <Input size="lg" label="Seniority rating" name="seniority_rating" onChange={e => handleSkillChange(skill.skill_id, e)}/>
                                                 <Button
                                                     variant="outlined"
                                                     className="flex items-center"
                                                     disabled={skills.length === 1}
-                                                    onClick={() => handleRemoveFields(skill.skillNum)}
+                                                    onClick={() => handleRemoveFields(skill.skill_id)}
                                                 >
                                                     <TrashIcon className="h-5 w-5" />
                                                 </Button>
