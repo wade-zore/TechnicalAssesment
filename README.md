@@ -50,3 +50,10 @@ $ make test
 ```
 $ make dup
 ```
+
+8. Start the application
+
+```
+You can access the app via 
+http://localhost:3000/
+```
