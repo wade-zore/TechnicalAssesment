@@ -16,7 +16,7 @@ import {
     Tooltip,
 } from "@material-tailwind/react";
 
-const TABLE_HEAD = ["Employee", "Contact Number", "Employed", ""," "];
+const TABLE_HEAD = ["Employee", "Contact Number", "Birthday", ""," "];
 
 function ListEmployees(){
 
@@ -72,7 +72,7 @@ function ListEmployees(){
         return () => { // This code runs when component is unmounted
             componentMounted.current = false; // (4) set it to false when we leave the page
         }
-    }, [employees])
+    }, [])
 
     /**
      * Make a call to the rest endpoint to get list of employee record from database

@@ -28,6 +28,7 @@ class Skill(models.Model):
         choices=RATINGS,
         default="beginner",
     )
+    employee = models.ForeignKey('Employee', on_delete=models.CASCADE, related_name='skills', null=True)
 
     class Meta:
         verbose_name = "Skill"
@@ -48,9 +49,6 @@ class Employee(models.Model):
     city = models.CharField(max_length=200)
     postal_code = models.CharField(max_length=200)
     country = models.CharField(max_length=200)
-    skills = models.ManyToManyField(
-        Skill, related_name="skills"
-    )
 
     def save(self, *args, **kwargs):
         if not self.id:  # Check if an ID already exists

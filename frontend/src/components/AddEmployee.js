@@ -89,7 +89,7 @@ function AddEmployee() {
     const handleCountryChange = (e) => setCoutry(e.target.value)
     const handleSkillChange = (id, e) => {
         const newSkills = skills.map(i => {
-            if (id === i.skillNum) {
+            if (id === i.skill_id) {
                 i[e.target.name] = e.target.value
             }
             return i;
@@ -103,7 +103,7 @@ function AddEmployee() {
      */
     const handleRemoveFields = id => {
         const values = [...skills];
-        values.splice(values.findIndex(value => value.skillNum === id), 1);
+        values.splice(values.findIndex(value => value.skill_id === id), 1);
         setSkill(values);
     }
 
@@ -114,6 +114,65 @@ function AddEmployee() {
         setSkill([...skills, { skill_id: uuidv4(), skill: "", experience: "", seniority_rating: "" }])
     }
 
+    /**
+     * Validates the employee fields.
+     * 1. makes sure all fields are not empty
+     * 2. makes sure firstName, LastName, city and Country only have letters
+     * 3. validates emial address
+     * 4. validdates the date field
+     * @param {*} employee 
+     * @returns boolean
+     */
+    const validate = (employee) => {
+        let required = ["first_name","last_name","contact_number","email","date_of_birth","street_address","city","postal_code","country"]
+        let onlyLetters = ["first_name","last_name","city","country"]
+        let skillRequired = ["skill","experience","seniority_rating"]
+        let err = {}
+        let formIsValid = true
+        
+       
+        required.forEach(field => {
+            if(!employee[field]){
+                formIsValid = false
+                err[field] = "** Please fill the required fields"
+            }
+        })
+       
+        employee.skills.forEach(skill => {
+            
+            skillRequired.forEach(skillRequire => {
+
+                if(!skill[skillRequire]){
+                    formIsValid = false
+                    err[skillRequire] = "** Please fill the required fields"
+                }
+            })
+        })
+        if(!formIsValid){
+            onlyLetters.forEach(field =>{
+                if(!employee[field].match(/^[a-zA-Z\s_-]+$/)){
+                    formIsValid = false
+                    err[field] = "** Only letters"
+                }
+            })
+
+            if(!email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)){
+                formIsValid = false
+                err["email"] = "** Email is not valid"
+            }  
+
+            var datePattern = /^\d{4}-\d{2}-\d{2}$/;
+            
+            if(!datePattern.test(date_of_birth)){
+                formIsValid = false
+                err["date_of_Birth"] = "** Date is not valid"
+            }
+        }
+
+
+        setError(err)
+        return formIsValid
+    }
 
 
     /**
@@ -134,7 +193,11 @@ function AddEmployee() {
             country: country,
             skills: skills
         }
-        console.log(employee)
+        
+
+        let error = validate(employee)
+        
+        if(error){
             fetch("http://localhost:8000/employee/", {
                 method: 'POST',
                 mode: 'cors',
@@ -151,7 +214,9 @@ function AddEmployee() {
                     console.log(err)
                 })
                 goBack()
-        
+            } else{
+                console.log("Validation Error")
+               }
     }
 
     /**
@@ -191,20 +256,68 @@ function AddEmployee() {
                     <form className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96 ml-4">
                         <div className="flex flex-col gap-6">
                             <div className="flex gap-6" >
-                                <Input size="lg" label="First name" name="first_name" onChange={handleFirsNameChange}/>
-                                <Input size="lg" label="Last name" name="last_name" onChange={handleLastNameChange}/>
+                                <div>
+                                    <Input size="lg" label="First name" id="first_name" name="first_name" onChange={handleFirsNameChange}/>
+                                    <Typography variant="small" color="gray" className="mt-2 flex items-center gap-1 font-normal">
+                                            {errors["first_name"]}
+                                    </Typography>
+                                </div>
+                                <div>
+                                    <Input size="lg" label="Last name" id="last_name" name="last_name" onChange={handleLastNameChange}/>
+                                    <Typography variant="small" color="gray" className="mt-2 flex items-center gap-1 font-normal">
+                                            {errors["last_name"]}
+                                    </Typography>
+                                </div>
                             </div>
-                            <Input size="lg" label="Email" name="email" onChange={handleEmailChange} />
-                            <Input size="lg" label="Contact number" name="contact" onChange={handleNumberChange}/>
-                            <Input size="lg" label="Date of birth" className="w-[15rem]" name="date_of_birth" onChange={handleDOBChange} />
-                            
-                            <Input size="lg" label="Street Address" className="w-[40rem]" name="street_address" onChange={handleStreetChange}/>
-                            
+
+                            <div>
+                                <Input size="lg" label="Email" id="email" name="email" onChange={handleEmailChange} />
+                                <Typography variant="small" color="gray" className="mt-2 flex items-center gap-1 font-normal">
+                                        {errors["email"]}
+                                </Typography>
+                            </div>
+
+                            <div>
+                                <Input size="lg" label="Contact number" id="contact_number" name="contact_number" onChange={handleNumberChange}/>
+                                <Typography variant="small" color="gray" className="mt-2 flex items-center gap-1 font-normal">
+                                        {errors["contact_number"]}
+                                </Typography>
+                            </div>
+
+                            <div>
+                                <Input size="lg" label="Date of birth" placeholder="" className="w-[15rem]" id="date_of_birth" name="date_of_birth" onChange={handleDOBChange} />
+                                <Typography variant="small" color="gray" className="mt-2 flex items-center gap-1 font-normal">
+                                        {errors["date_of_birth"]}
+                                </Typography>
+                            </div>
+
+                            <div>
+                                <Input size="lg" label="Street Address" className="w-[40rem]" id="street_name" name="street_address" onChange={handleStreetChange}/>
+                                <Typography variant="small" color="gray" className="mt-2 flex items-center gap-1 font-normal">
+                                        {errors["street_address"]}
+                                </Typography>
+                            </div>
 
                             <div className="flex gap-2" >
-                                <Input size="lg" label="City" onChange={handleCityChange}/>
-                                <Input size="lg" label="Courty" onChange={handleCountryChange}/>
-                                <Input size="lg" label="Postal code" name="postal_code" onChange={handleCodeChange}/>
+                                <div>
+                                    <Input size="lg" label="City" id="city" name="city" onChange={handleCityChange}/>
+                                    <Typography variant="small" color="gray" className="mt-2 flex items-center gap-1 font-normal">
+                                            {errors["city"]}
+                                    </Typography>
+                                </div>
+                                <div>
+                                    <Input size="lg" label="Courty" id="coutry" name="country" onChange={handleCountryChange}/>
+                                    <Typography variant="small" color="gray" className="mt-2 flex items-center gap-1 font-normal">
+                                            {errors["country"]}
+                                    </Typography>
+                                </div>
+                                <div>
+                                    <Input size="lg" label="Postal code" id="postal_code" name="postal_code" onChange={handleCodeChange}/>
+                                    <Typography variant="small" color="gray" className="mt-2 flex items-center gap-1 font-normal">
+                                            {errors["postal_code"]}
+                                    </Typography>
+                                </div>
+        
                             </div>
                             
                             
@@ -215,18 +328,33 @@ function AddEmployee() {
                             {skills.map((skill) => {
                                 return (
 
-                                    <div key={skill.skillNum} >
+                                    <div key={skill.skill_id} >
 
-                                        <div key={skill.skillNum} >
+                                        <div key={skill.skill_id} >
                                             <div className="flex gap-2" >
-                                                <Input size="lg" label="Skill" name="skill" onChange={e => handleSkillChange(skill.skillNum, e)}/>
-                                                <Input size="lg" label="Years experience" name="experience" onChange={e => handleSkillChange(skill.skillNum, e)}/>
-                                                <Input size="lg" label="Seniority rating" name="seniority_rating" onChange={e => handleSkillChange(skill.skillNum, e)}/>
+                                                <div>
+                                                    <Input size="lg" label="Skill" id="skill" name="skill" onChange={e => handleSkillChange(skill.skill_id, e)}/>
+                                                    <Typography variant="small" color="gray" className="mt-2 flex items-center gap-1 font-normal">
+                                                        {errors["skill"]}
+                                                    </Typography>
+                                                </div>
+                                                <div>
+                                                    <Input size="lg" label="Years experience" name="experience" onChange={e => handleSkillChange(skill.skill_id, e)}/>
+                                                    <Typography variant="small" color="gray" className="mt-2 flex items-center gap-1 font-normal">
+                                                        {errors["experience"]}
+                                                    </Typography>
+                                                </div>
+                                                <div>
+                                                    <Input size="lg" label="Seniority rating" name="seniority_rating" onChange={e => handleSkillChange(skill.skill_id, e)}/>
+                                                    <Typography variant="small" color="gray" className="mt-2 flex items-center gap-1 font-normal">
+                                                        {errors["seniority_rating"]}
+                                                    </Typography>
+                                                </div>
                                                 <Button
                                                     variant="outlined"
                                                     className="flex items-center"
                                                     disabled={skills.length === 1}
-                                                    onClick={() => handleRemoveFields(skill.skillNum)}
+                                                    onClick={() => handleRemoveFields(skill.skill_id)}
                                                 >
                                                     <TrashIcon className="h-5 w-5" />
                                                 </Button>

@@ -28,7 +28,7 @@ function EditEmployee(props) {
     const [city,setCity] = useState("")
     const [postal_code,setPostalCode] = useState("")
     const [country,setCoutry] = useState("")
-    const [skills,setSkill] = useState([{id: uuidv4(),skill:"",experience:"",seniority_rating:""}])
+    const [skills,setSkill] = useState([{skill_id: uuidv4(),skill:"",experience:"",seniority_rating:""}])
     const [errors,setError] = useState({})
     const history = useNavigate();
 
@@ -117,7 +117,7 @@ function EditEmployee(props) {
     const handleCountryChange = (e) => setCoutry(e.target.value)
     const handleSkillChange = (id,e) => {
         const newSkills = skills.map(i =>{
-            if(id === i.skillNum){
+            if(id === i.skill_id){
                 i[e.target.name] = e.target.value
             }
             return i;
@@ -131,7 +131,7 @@ function EditEmployee(props) {
      */
     const handleRemoveFields = id => {
         const values = [...skills];
-        values.splice(values.findIndex(value => value.skillNum === id),1);
+        values.splice(values.findIndex(value => value.skill_id === id),1);
         setSkill(values);
     }
 
@@ -139,7 +139,7 @@ function EditEmployee(props) {
      * Added another skill bock
      */
     const handleAddFields = () => {
-        setSkill([...skills, {skillNum: uuidv4(),skill:"",experience:"",seniority_rating:""}])
+        setSkill([...skills, {skill_id: uuidv4(),skill:"",experience:"",seniority_rating:""}])
     }
 
     /**
@@ -207,7 +207,7 @@ function EditEmployee(props) {
                 <div className="mb-8 flex items-center justify-between gap-8">
                     <div>
                         <Typography variant="h5" color="blue-gray">
-                            Edit {employee_id}
+                            Edit {id}
                         </Typography>
                         <Typography color="gray" className="mt-1 font-normal">
                             Edit or Delete record for {first_name+" "+last_name}
@@ -243,18 +243,18 @@ function EditEmployee(props) {
                         {skills.map((skill) => {
                             return (
 
-                                <div key={skill.skillNum} >
+                                <div key={skill.skill_id} >
 
-                                    <div key={skill.skillNum} >
+                                    <div key={skill.skill_id} >
                                         <div className="flex gap-2" >
-                                            <Input size="lg" label="Skill" name="skill" value={skill.skill} onChange={e => handleSkillChange(skill.skillNum, e)}/>
-                                            <Input size="lg" label="Years experience" name="experience" value={skill.experience} onChange={e => handleSkillChange(skill.skillNum, e)}/>
-                                            <Input size="lg" label="Seniority rating" value={skill.seniority_rating} name="seniority_rating" onChange={e => handleSkillChange(skill.skillNum, e)}/>
+                                            <Input size="lg" label="Skill" name="skill" value={skill.skill} onChange={e => handleSkillChange(skill.skill_id, e)}/>
+                                            <Input size="lg" label="Years experience" name="experience" value={skill.experience} onChange={e => handleSkillChange(skill.skill_id, e)}/>
+                                            <Input size="lg" label="Seniority rating" value={skill.seniority_rating} name="seniority_rating" onChange={e => handleSkillChange(skill.skill_id, e)}/>
                                             <Button
                                                 variant="outlined"
                                                 className="flex items-center"
                                                 disabled={skills.length === 1}
-                                                onClick={() => handleRemoveFields(skill.skillNum)}
+                                                onClick={() => handleRemoveFields(skill.skill_id)}
                                             >
                                                 <TrashIcon className="h-5 w-5" />
                                             </Button>
